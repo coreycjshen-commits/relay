@@ -5,7 +5,7 @@ import { Select } from "@/components/ui/select"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from "@/components/ui/card"
 import Link from 'next/link'
 
-export default function SignupPage({ searchParams: _searchParams }: { searchParams: Promise<{ error?: string; message?: string }> }) {
+export default async function SignupPage({ searchParams }: { searchParams: Promise<{ error?: string; message?: string }> }) {
     return (
         <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-8">
             <Card className="w-full max-w-md">
@@ -14,6 +14,12 @@ export default function SignupPage({ searchParams: _searchParams }: { searchPara
                     <CardDescription>
                         Create your account to connect with fellow athletes
                     </CardDescription>
+                    {/* Show error if exists */}
+                    {(await searchParams).error && (
+                        <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md mt-2">
+                            {(await searchParams).error}
+                        </div>
+                    )}
                 </CardHeader>
                 <CardContent>
                     <form className="space-y-4">

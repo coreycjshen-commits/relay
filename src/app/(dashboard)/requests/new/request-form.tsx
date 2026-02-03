@@ -35,10 +35,10 @@ export function RequestForm({ recipient }: { recipient?: Recipient }) {
         }
     }
 
-    const handleSubmit = async (formData: FormData) => {
+    const handleSubmit = async (_formData: FormData) => {
         setIsSubmitting(true)
         try {
-            await submitRequest(formData)
+            await submitRequest()
         } finally {
             setIsSubmitting(false)
         }
