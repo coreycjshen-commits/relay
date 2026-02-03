@@ -104,7 +104,7 @@ export function AthleteConnectionCard({ request, currentUserProfile }: AthleteCo
                             <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
                                 <div className="flex flex-wrap gap-2">
                                     {overlaps.map((overlap, i) => (
-                                        <Badge key={i} variant="secondary" className="bg-amber-100 text-amber-800 hover:bg-amber-100 border-amber-200 flex items-center gap-1.5 px-2.5 py-0.5">
+                                        <Badge key={i} variant="warning" className="bg-amber-100 text-amber-800 hover:bg-amber-100 border-amber-200 flex items-center gap-1.5 px-2.5 py-0.5">
                                             {overlap.icon}
                                             {overlap.label}
                                         </Badge>
