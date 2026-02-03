@@ -33,6 +33,9 @@ export async function signup(formData: FormData) {
     const name = formData.get('name') as string
     const role = formData.get('role') as 'student' | 'alum'
 
+    // Get the origin for the email redirect URL
+    const origin = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+
     const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
@@ -40,23 +43,15 @@ export async function signup(formData: FormData) {
             data: {
                 name,
                 role,
-            }
+            },
+            emailRedirectTo: `${origin}/auth/callback`,
         }
     })
 
-    // We should also initialize the user record in our public.users table via a trigger or manually here.
-    // For simplicity assuming trigger exists or doing it here if trigger fails/not set up.
-    // Actually, let's trust Supabase Auth -> public.users trigger if I had one, 
-    // but since I didn't write a trigger in the migration, I must insert it manually.
-
     if (signUpError) {
-        return redirect(`/signup?error=${signUpError.message}`)
+        return redirect(`/signup?error=${encodeURIComponent(signUpError.message)}`)
     }
 
-    // Note: We can't insert into public.users here easily because we don't know the ID yet if email confirmation is on. 
-    // However, `signUp` returns session/user if auto-confirm is on or just user if not.
-    // Let's rely on a trigger I will ADD to the database to ensure data integrity.
-
-    revalidatePath('/', 'layout')
-    redirect('/login?message=Check email to continue sign in process')
+    // Redirect to check-email page instead of login
+    redirect('/signup/check-email')
 }

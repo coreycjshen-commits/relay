@@ -65,7 +65,7 @@ function Hero() {
                         </h1>
 
                         <p className="text-lg md:text-xl leading-relaxed tracking-tight text-muted-foreground max-w-2xl text-center">
-                            Relay helps student-athletes and alumni turn shared athletic experience into trusted career advice and opportunity. Where student-athletes meet to network.
+                            Relay is a private network for elite college athletes (D1, D2, D3) and alumni, turning shared athletic experience into trusted career advice and opportunity. Where student-athletes meet to network.
                         </p>
                     </div>
                     <div className="flex flex-row gap-3">

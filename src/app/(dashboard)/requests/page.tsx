@@ -2,64 +2,9 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Clock, ArrowRight } from "lucide-react"
-
-type Request = {
-    id: string
-    request_type: string
-    context: string
-    time_commitment: string
-    status: string
-    created_at: string
-    expires_at: string
-    requester_id: string
-    users?: {
-        name: string
-        athlete_profiles?: {
-            school: string
-            sport: string
-        }
-    }
-}
-
-function getStatusBadge(status: string) {
-    switch (status) {
-        case 'pending':
-            return <Badge variant="warning">Pending</Badge>
-        case 'accepted':
-            return <Badge variant="success">Accepted</Badge>
-        case 'declined':
-            return <Badge variant="destructive">Declined</Badge>
-        case 'referred':
-            return <Badge variant="outline">Referred</Badge>
-        default:
-            return <Badge>{status}</Badge>
-    }
-}
-
-function getRequestTypeLabel(type: string) {
-    switch (type) {
-        case 'advice': return 'Career Advice'
-        case 'internship': return 'Internship'
-        case 'fulltime': return 'Full-time Role'
-        case 'referral': return 'Referral'
-        default: return type
-    }
-}
-
-function formatDate(dateString: string) {
-    return new Date(dateString).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-    })
-}
-
-function isExpired(expiresAt: string) {
-    return new Date(expiresAt) < new Date()
-}
+import { Card, CardContent } from "@/components/ui/card"
+import { Plus } from "lucide-react"
+import { AthleteConnectionCard } from "./athlete-connection-card"
 
 export default async function RequestsPage() {
     const supabase = await createClient()
@@ -69,22 +14,28 @@ export default async function RequestsPage() {
         redirect('/login')
     }
 
-    // Fetch requests I sent
+    // Fetch current user profile (for overlap logic)
+    const { data: currentUserProfile } = await supabase
+        .from('athlete_profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+
+    // Fetch requests I sent (My Plays)
     const { data: sentRequests } = await supabase
         .from('requests')
         .select('*')
         .eq('requester_id', user.id)
         .order('created_at', { ascending: false })
 
-    // Fetch requests sent to me (for now, show all pending requests from others)
-    // In a production app, this would be based on matching criteria
+    // Fetch requests sent to me (Team Huddle)
     const { data: receivedRequests } = await supabase
         .from('requests')
         .select(`
             *,
             users:requester_id (
                 name,
-                athlete_profiles (school, sport)
+                athlete_profiles (school, sport, graduation_year, level)
             )
         `)
         .neq('requester_id', user.id)
@@ -93,130 +44,113 @@ export default async function RequestsPage() {
         .limit(20)
 
     return (
-        <div className="container mx-auto p-4 space-y-8 animate-fade-in">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h1 className="text-heading-1 text-primary">Requests</h1>
-                    <p className="text-muted-foreground">Manage your career requests and responses</p>
-                </div>
-                <Link href="/requests/new">
-                    <Button variant="secondary" className="gap-2">
-                        <Plus className="h-4 w-4" />
-                        New Request
-                    </Button>
-                </Link>
-            </div>
+        <div className="container mx-auto px-4 py-8 max-w-[1128px] animate-fade-in">
+            <div className="flex flex-col md:flex-row gap-8 items-start">
 
-            {/* My Sent Requests */}
-            <section>
-                <h2 className="text-heading-2 text-primary mb-4">My Requests</h2>
-                {(!sentRequests || sentRequests.length === 0) ? (
-                    <Card className="border-dashed">
-                        <CardContent className="py-12 text-center">
-                            <p className="text-muted-foreground mb-4">You haven&apos;t sent any requests yet.</p>
-                            <Link href="/requests/new">
-                                <Button variant="outline">Create Your First Request</Button>
+                {/* LEFT COLUMN: Team Huddle (Incoming Requests) - PRIMARY */}
+                <main className="flex-1 w-full">
+                    <div className="mb-6">
+                        <h1 className="text-2xl font-bold text-slate-900">My Network</h1>
+                        <p className="text-slate-500">Athletes in your huddle waiting for a response</p>
+                    </div>
+
+                    {(!receivedRequests || receivedRequests.length === 0) ? (
+                        <Card className="bg-slate-50 border-none shadow-none">
+                            <CardContent className="py-16 text-center flex flex-col items-center">
+                                <div className="h-16 w-16 bg-white rounded-full flex items-center justify-center text-3xl mb-4 shadow-sm border border-slate-100">
+                                    🤝
+                                </div>
+                                <h3 className="text-lg font-semibold text-slate-900">All caught up!</h3>
+                                <p className="text-slate-500 max-w-sm mx-auto mt-1 mb-6">
+                                    You don&apos;t have any pending requests. Maybe verify your profile to become more visible?
+                                </p>
+                                <Link href="/profile/verify">
+                                    <Button variant="outline">Verify Profile</Button>
+                                </Link>
+                            </CardContent>
+                        </Card>
+                    ) : (
+                        <div>
+                            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
+                                Incoming Requests ({receivedRequests.length})
+                            </h2>
+                            {receivedRequests.map((request) => (
+                                // @ts-ignore
+                                <AthleteConnectionCard
+                                    key={request.id}
+                                    request={request}
+                                    currentUserProfile={currentUserProfile || undefined}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </main>
+
+                {/* RIGHT COLUMN: My Plays (Outgoing Status) - SECONDARY */}
+                <aside className="w-full md:w-[320px] shrink-0">
+                    <div className="sticky top-6">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-lg font-bold text-slate-900">My Plays</h2>
+                            <Link href="/network">
+                                <Button size="sm" variant="secondary" className="gap-1.5 h-8 px-3">
+                                    <Plus className="h-3.5 w-3.5" />
+                                    New
+                                </Button>
                             </Link>
-                        </CardContent>
-                    </Card>
-                ) : (
-                    <div className="grid gap-4">
-                        {sentRequests.map((request: Request) => (
-                            <Card key={request.id} className="hover-lift transition-base">
-                                <CardHeader className="pb-2">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <CardTitle className="text-lg">
-                                                {getRequestTypeLabel(request.request_type)}
-                                            </CardTitle>
-                                            <CardDescription className="flex items-center gap-2 mt-1">
-                                                <Clock className="h-3 w-3" />
-                                                {request.time_commitment}
-                                            </CardDescription>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            {getStatusBadge(request.status)}
-                                            {isExpired(request.expires_at) && request.status === 'pending' && (
-                                                <Badge variant="destructive">Expired</Badge>
-                                            )}
-                                        </div>
-                                    </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                                        {request.context}
-                                    </p>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-xs text-muted-foreground">
-                                            Sent {formatDate(request.created_at)}
-                                        </span>
-                                        <Link href={`/requests/${request.id}`}>
-                                            <Button variant="ghost" size="sm" className="gap-1">
-                                                View Details <ArrowRight className="h-3 w-3" />
-                                            </Button>
-                                        </Link>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
-                )}
-            </section>
+                        </div>
 
-            {/* Requests To Respond To */}
-            <section>
-                <h2 className="text-heading-2 text-primary mb-4">Requests From Athletes</h2>
-                <p className="text-sm text-muted-foreground mb-4">Help fellow athletes by responding to their requests</p>
-
-                {(!receivedRequests || receivedRequests.length === 0) ? (
-                    <Card className="border-dashed">
-                        <CardContent className="py-12 text-center">
-                            <p className="text-muted-foreground">No pending requests to review right now.</p>
-                        </CardContent>
-                    </Card>
-                ) : (
-                    <div className="grid gap-4">
-                        {receivedRequests.map((request: Request) => (
-                            <Card key={request.id} className="hover-lift transition-base border-l-4 border-l-secondary">
-                                <CardHeader className="pb-2">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <CardTitle className="text-lg flex items-center gap-2">
-                                                {getRequestTypeLabel(request.request_type)}
-                                                <Badge variant="outline" className="font-normal">
-                                                    {request.users?.athlete_profiles?.sport || 'Athlete'}
-                                                </Badge>
-                                            </CardTitle>
-                                            <CardDescription className="mt-1">
-                                                {request.users?.name} • {request.users?.athlete_profiles?.school}
-                                            </CardDescription>
+                        <Card>
+                            <CardContent className="p-0">
+                                {(!sentRequests || sentRequests.length === 0) ? (
+                                    <div className="p-6 text-center text-sm text-slate-500">
+                                        No active requests sent.
+                                        <div className="mt-3">
+                                            <Link href="/network">
+                                                <Button variant="link" size="sm" className="text-primary p-0 h-auto">
+                                                    Browse network &rarr;
+                                                </Button>
+                                            </Link>
                                         </div>
-                                        <Badge variant="warning">Awaiting Response</Badge>
                                     </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                                        {request.context}
-                                    </p>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                            <Clock className="h-3 w-3" />
-                                            {request.time_commitment}
-                                        </span>
-                                        <Link href={`/requests/${request.id}`}>
-                                            <Button variant="secondary" size="sm" className="gap-1">
-                                                Respond <ArrowRight className="h-3 w-3" />
-                                            </Button>
-                                        </Link>
+                                ) : (
+                                    <div className="divide-y divide-slate-100">
+                                        {sentRequests.map((req) => (
+                                            <div key={req.id} className="p-4 hover:bg-slate-50 transition-colors">
+                                                <div className="flex justify-between items-start mb-1">
+                                                    <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                                        {req.request_type}
+                                                    </span>
+                                                    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${req.status === 'accepted' ? 'bg-green-100 text-green-700' :
+                                                        req.status === 'declined' ? 'bg-red-100 text-red-700' :
+                                                            'bg-amber-100 text-amber-700'
+                                                        }`}>
+                                                        {req.status}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm font-medium text-slate-900 line-clamp-2">
+                                                    {req.context}
+                                                </p>
+                                                <div className="mt-2 text-xs text-slate-400">
+                                                    Sent {new Date(req.created_at).toLocaleDateString()}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                </CardContent>
-                            </Card>
-                        ))}
+                                )}
+                            </CardContent>
+                        </Card>
+
+                        <div className="mt-6 bg-blue-50 rounded-lg p-4 border border-blue-100">
+                            <h4 className="font-semibold text-blue-900 text-sm mb-1">💡 Pro Tip</h4>
+                            <p className="text-xs text-blue-800 leading-relaxed">
+                                Athletes are 3x more likely to respond if you mention your shared sport in the first sentence.
+                            </p>
+                        </div>
                     </div>
-                )}
-            </section>
+                </aside>
+            </div>
         </div>
     )
 }
+
 

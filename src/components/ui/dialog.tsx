@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
 import { cn } from "@/lib/utils"
 import { X } from "lucide-react"
 
@@ -59,10 +60,12 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
             setOpen(true)
         }
 
+        const Comp = asChild ? Slot : "button"
+
         return (
-            <button ref={ref} onClick={handleClick} {...props}>
+            <Comp ref={ref} onClick={handleClick} {...props}>
                 {children}
-            </button>
+            </Comp>
         )
     }
 )

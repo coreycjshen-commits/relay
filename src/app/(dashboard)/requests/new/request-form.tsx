@@ -1,14 +1,22 @@
-'use client'
-
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select } from "@/components/ui/select"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { refineRequestDraft, submitRequest } from './actions'
-import { Wand2 } from 'lucide-react'
+import { Wand2, User } from 'lucide-react'
 
-export function RequestForm() {
+interface Recipient {
+    id: string
+    name: string
+    sport: string
+    school: string
+    role: string
+    imageUrl?: string
+}
+
+export function RequestForm({ recipient }: { recipient?: Recipient }) {
     const [context, setContext] = useState('')
     const [offer, setOffer] = useState('')
     const [isRefining, setIsRefining] = useState(false)
@@ -38,8 +46,29 @@ export function RequestForm() {
 
     return (
         <form action={handleSubmit} className="space-y-6">
+            {recipient && (
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-primary/5 border border-primary/10 mb-2">
+                    <Avatar className="h-12 w-12 border-2 border-background shadow-sm">
+                        <AvatarImage src={recipient.imageUrl} alt={recipient.name} />
+                        <AvatarFallback>
+                            {recipient.name.split(' ').map(n => n[0]).join('')}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                        <p className="text-sm font-semibold text-foreground">
+                            Requesting help from {recipient.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                            {recipient.sport} • {recipient.school} • {recipient.role}
+                        </p>
+                    </div>
+                </div>
+            )}
+
             <div className="space-y-2">
-                <label className="text-sm font-medium">Request Type</label>
+                <label className="text-sm font-medium">
+                    {recipient ? `What kind of help are you asking ${recipient.name.split(' ')[0]} for?` : "Request Type"}
+                </label>
                 <Select name="type" required>
                     <option value="">Select a request type...</option>
                     <option value="advice">Career Advice</option>
@@ -47,27 +76,28 @@ export function RequestForm() {
                     <option value="fulltime">Full-time Role</option>
                     <option value="referral">Referral</option>
                 </Select>
-                <p className="text-xs text-muted-foreground">What kind of help are you looking for?</p>
             </div>
 
             <div className="space-y-2">
-                <label className="text-sm font-medium">Context</label>
+                <label className="text-sm font-medium">
+                    {recipient ? `Tell ${recipient.name.split(' ')[0]} why you're reaching out` : "Context"}
+                </label>
                 <Textarea
                     name="context"
                     value={context}
                     onChange={(e) => setContext(e.target.value)}
-                    placeholder="e.g. D1 Swimmer, Junior year at Stanford, looking to break into finance. Interested in investment banking at Goldman Sachs..."
+                    placeholder={recipient ? `Hi ${recipient.name.split(' ')[0]}, I'm a fellow student-athlete interested in...` : "e.g. D1 Swimmer, Junior year at Stanford, looking to break into finance..."}
                     showCount
                     maxLength={500}
                     required
                 />
-                <p className="text-xs text-muted-foreground">Include your sport, school, year, and career goals</p>
+                <p className="text-xs text-muted-foreground">This is a personal 1-to-1 message. Mention shared values or sports background.</p>
             </div>
 
             <div className="space-y-2">
                 <label className="text-sm font-medium">Time Commitment</label>
                 <Select name="time_commitment" required>
-                    <option value="">How much time are you asking for?</option>
+                    <option value="">How much of their time are you asking for?</option>
                     <option value="15min">15 minute call</option>
                     <option value="30min">30 minute call</option>
                     <option value="email">Email exchange</option>
@@ -82,10 +112,10 @@ export function RequestForm() {
                     name="offer"
                     value={offer}
                     onChange={(e) => setOffer(e.target.value)}
-                    placeholder="e.g. I'll send a follow-up summary of our conversation, update you on outcomes..."
+                    placeholder="e.g. I'll send a follow-up summary, share my network, or update you on my progress..."
                     required
                 />
-                <p className="text-xs text-muted-foreground">Reciprocity matters - what value can you provide?</p>
+                <p className="text-xs text-muted-foreground">Reciprocity builds trust. How will you show appreciation?</p>
             </div>
 
             {/* AI Assist Section */}
@@ -111,14 +141,15 @@ export function RequestForm() {
                 </div>
             </div>
 
+            <input type="hidden" name="recipient_id" value={recipient?.id || ""} />
             <input type="hidden" name="ai_assisted" value={isRefining ? "true" : "false"} />
 
             <Button className="w-full" type="submit" loading={isSubmitting} size="lg">
-                {isSubmitting ? "Submitting..." : "Submit Request"}
+                {isSubmitting ? "Sending..." : "Send Personal Request"}
             </Button>
 
-            <p className="text-xs text-center text-muted-foreground">
-                Requests expire after 7 days if not responded to
+            <p className="text-xs text-center text-muted-foreground italic">
+                {recipient ? `Only ${recipient.name} will see this request.` : "Requests expire after 7 days if not responded to."}
             </p>
         </form>
     )

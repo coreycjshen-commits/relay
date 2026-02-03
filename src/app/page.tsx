@@ -2,15 +2,15 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Shield, CheckCircle, Users, TrendingUp } from "lucide-react"
-import { Hero } from "@/components/ui/animated-hero"
+import HeroSection from "@/components/ui/glassmorphism-trust-hero"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="bg-background">
-        <Hero />
+      <section>
+        <HeroSection />
       </section>
 
       {/* Value Props Section */}
