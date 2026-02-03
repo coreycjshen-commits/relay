@@ -142,12 +142,6 @@ export default function NetworkPage() {
         setIsDialogOpen(true)
     }
 
-    const handleRequestSubmitted = (id: string) => {
-        setConnected((prev) => new Set(prev).add(id))
-        setIsDialogOpen(false)
-        setSelectedPerson(null)
-    }
-
     return (
         <div className="container mx-auto max-w-7xl py-10 px-4 sm:px-6 lg:px-8 space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

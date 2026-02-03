@@ -72,7 +72,7 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
 DialogTrigger.displayName = "DialogTrigger"
 
 // Dialog content
-interface DialogContentProps extends React.HTMLAttributes<HTMLDivElement> { }
+type DialogContentProps = React.HTMLAttributes<HTMLDivElement>
 
 const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
     ({ className, children, ...props }, ref) => {

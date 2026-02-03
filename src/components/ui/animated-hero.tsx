@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { MoveRight, PhoneCall, User } from "lucide-react";
+import { MoveRight, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
