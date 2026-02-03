@@ -125,7 +125,7 @@ const PEOPLE: Person[] = [
 
 export default function NetworkPage() {
     const [filter, setFilter] = useState<Sport | "All">("All")
-    const [connected, setConnected] = useState<Set<string>>(new Set())
+    const [connected] = useState<Set<string>>(new Set())
     const [selectedPerson, setSelectedPerson] = useState<Person | null>(null)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -217,7 +217,7 @@ export default function NetworkPage() {
                                 <CardContent className="pb-2">
                                     <div className="flex flex-wrap gap-2 mt-2">
                                         <Badge
-                                            variant="secondary"
+                                            variant="default"
                                             className="bg-primary/10 text-primary hover:bg-primary/20"
                                         >
                                             {person.sport}

@@ -75,7 +75,6 @@ export default async function RequestsPage() {
                                 Incoming Requests ({receivedRequests.length})
                             </h2>
                             {receivedRequests.map((request) => (
-                                // @ts-ignore
                                 <AthleteConnectionCard
                                     key={request.id}
                                     request={request}

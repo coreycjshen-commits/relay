@@ -12,7 +12,7 @@ export default async function Navbar() {
     return (
         <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
             <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                <Link href="/" className="font-bold text-xl text-primary flex items-center gap-2 transition-base hover:opacity-80">
+                <Link href={user ? "/dashboard" : "/"} className="font-bold text-xl text-primary flex items-center gap-2 transition-base hover:opacity-80">
                     <Image
                         src="/relay-logo.png"
                         alt="Relay"

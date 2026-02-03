@@ -1,8 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Edit, Eye } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Edit } from "lucide-react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export function ProfileSidebar() {
     return (

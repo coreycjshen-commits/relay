@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus, Trash2, Briefcase, Calendar, MoveRight } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Plus, Trash2, Briefcase, Calendar } from "lucide-react"
 import { addExperience, deleteExperience } from './actions'
 
 type Experience = {

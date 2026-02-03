@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { refineRequestDraft, submitRequest } from './actions'
-import { Wand2, User } from 'lucide-react'
+import { Wand2 } from 'lucide-react'
 
 interface Recipient {
     id: string

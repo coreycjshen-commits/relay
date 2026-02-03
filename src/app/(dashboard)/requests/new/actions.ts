@@ -19,7 +19,7 @@ export async function refineRequestDraft(context: string, offer: string) {
     }
 }
 
-export async function submitRequest(formData: FormData) {
+export async function submitRequest(_formData: FormData) {
     'use server'
     // This would save to Supabase
     // placeholder for now
