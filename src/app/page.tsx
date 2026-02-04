@@ -25,7 +25,32 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* Shared Athlete Experience */}
+            <div className="relative h-full rounded-[1.25rem] border-[0.75px] border-border p-2 md:rounded-[1.5rem] md:p-3 hover-lift">
+              <GlowingEffect
+                spread={40}
+                glow={true}
+                disabled={false}
+                proximity={64}
+                inactiveZone={0.01}
+                borderWidth={3}
+              />
+              <div className="relative h-full flex flex-col justify-between gap-6 overflow-hidden rounded-xl border-[0.75px] bg-background p-6 shadow-sm dark:shadow-[0px_0px_27px_0px_rgba(45,45,45,0.3)] md:p-6 bg-card">
+                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-5">
+                  <Users className="h-6 w-6 text-secondary" />
+                </div>
+                <div className="space-y-3">
+                  <h3 className="text-heading-3 text-primary mb-3">Shared Athlete Experience</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    College athletes develop discipline, work ethic, leadership, and the ability
+                    to perform under pressure. These traits create a unique bond that makes connections
+                    especially powerful.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className="relative h-full rounded-[1.25rem] border-[0.75px] border-border p-2 md:rounded-[1.5rem] md:p-3 hover-lift">
               <GlowingEffect
                 spread={40}
@@ -42,7 +67,7 @@ export default function LandingPage() {
                 <div className="space-y-3">
                   <h3 className="text-heading-3 text-primary mb-3">Verified Community</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Every member is a verified NCAA student-athlete or alumni.
+                    Every member is a verified NCAA student-athlete or alumni (D1, D2, D3).
                     No strangers, no spam—just trusted teammates.
                   </p>
                 </div>
