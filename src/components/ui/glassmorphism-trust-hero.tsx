@@ -106,6 +106,7 @@ export default function HeroSection() {
                         <p className="animate-fade-in delay-300 max-w-xl text-lg text-zinc-400 leading-relaxed">
                             Relay is a private network for dedicated student-athletes (D1, D2, D3) and alumni,
                             turning shared athletic experience into trusted career advice and opportunity.
+                            Your network is verified.
                         </p>
 
                         {/* CTA Buttons */}
