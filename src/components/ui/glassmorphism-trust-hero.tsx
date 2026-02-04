@@ -96,17 +96,16 @@ export default function HeroSection() {
                                 WebkitMaskImage: "linear-gradient(180deg, black 0%, black 80%, transparent 100%)"
                             }}
                         >
-                            Your network is<br />
+                            Where student-athletes meet to<br />
                             <span className="bg-gradient-to-br from-white via-white to-[#ffcd75] bg-clip-text text-transparent">
-                                verified
+                                network
                             </span>
                         </h1>
 
                         {/* Description */}
                         <p className="animate-fade-in delay-300 max-w-xl text-lg text-zinc-400 leading-relaxed">
-                            Relay is a private network for elite college athletes (D1, D2, D3) and alumni,
+                            Relay is a private network for dedicated student-athletes (D1, D2, D3) and alumni,
                             turning shared athletic experience into trusted career advice and opportunity.
-                            Where student-athletes meet to network.
                         </p>
 
                         {/* CTA Buttons */}
@@ -183,7 +182,7 @@ export default function HeroSection() {
 
                         {/* Marquee Card */}
                         <div className="animate-fade-in delay-500 relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 py-8 backdrop-blur-xl">
-                            <h3 className="mb-6 px-8 text-sm font-medium text-zinc-400">Connect with Elite Level Athletes</h3>
+                            <h3 className="mb-6 px-8 text-sm font-medium text-zinc-400">Connect with dedicated student-athletes</h3>
 
                             <div
                                 className="relative flex overflow-hidden"
