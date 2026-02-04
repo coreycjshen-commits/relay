@@ -67,7 +67,7 @@ export default function LandingPage() {
                   <h3 className="text-heading-3 text-primary mb-3">Verified Community</h3>
                   <p className="text-muted-foreground leading-relaxed">
                     Every member is a verified NCAA student-athlete or alumni (D1, D2, D3).
-                    No strangers, no spam—just trusted teammates.
+                    No strangers, no spam. Only a shared athletic background.
                   </p>
                 </div>
               </div>
