@@ -43,9 +43,8 @@ export default function LandingPage() {
                 <div className="space-y-3">
                   <h3 className="text-heading-3 text-primary mb-3">Shared Athlete Experience</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    College athletes develop discipline, work ethic, and the ability
-                    to handle setbacks under pressure—strong traits for a successful professional career.
-                    This shared background creates a unique bond that makes connections especially powerful.
+                    Athletes develop discipline, resilience, and the ability to handle setbacks.
+                    These shared traits drive professional success and create a powerful, instant bond.
                   </p>
                 </div>
               </div>
