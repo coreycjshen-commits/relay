@@ -97,7 +97,7 @@ export default function HeroSection() {
                             }}
                         >
                             Where student-athletes meet to<br />
-                            <span className="bg-gradient-to-br from-white via-white to-[#ffcd75] bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-[#ffcd75] via-[#ff9f0a] to-[#ffcd75] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(255,205,117,0.4)] font-bold">
                                 network
                             </span>
                         </h1>
