@@ -6,6 +6,7 @@ import { Select } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { refineRequestDraft, submitRequest } from './actions'
 import { Wand2 } from 'lucide-react'
+import { toast } from "sonner"
 
 interface Recipient {
     id: string
@@ -16,7 +17,7 @@ interface Recipient {
     imageUrl?: string
 }
 
-export function RequestForm({ recipient }: { recipient?: Recipient }) {
+export function RequestForm({ recipient, onSuccess }: { recipient?: Recipient; onSuccess?: () => void }) {
     const [context, setContext] = useState('')
     const [offer, setOffer] = useState('')
     const [isRefining, setIsRefining] = useState(false)
@@ -39,6 +40,10 @@ export function RequestForm({ recipient }: { recipient?: Recipient }) {
         setIsSubmitting(true)
         try {
             await submitRequest()
+            toast.success("Request sent successfully!", {
+                description: `We'll let you know when ${recipient?.name.split(' ')[0] || 'they'} respond.`
+            })
+            if (onSuccess) onSuccess()
         } finally {
             setIsSubmitting(false)
         }

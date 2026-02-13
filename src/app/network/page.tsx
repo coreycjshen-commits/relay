@@ -280,6 +280,7 @@ export default function NetworkPage() {
                                 role: selectedPerson.role,
                                 imageUrl: selectedPerson.imageUrl
                             }}
+                            onSuccess={() => setIsDialogOpen(false)}
                         />
                     )}
                 </DialogContent>
