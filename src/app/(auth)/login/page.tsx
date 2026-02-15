@@ -1,8 +1,6 @@
-import { login } from '@/app/auth/actions'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from "@/components/ui/card"
 import Link from 'next/link'
+import LoginForm from './login-form'
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string; message?: string }> }) {
     const params = await searchParams
@@ -27,17 +25,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                             {params.message}
                         </div>
                     )}
-                    <form className="space-y-4">
-                        <div className="space-y-2">
-                            <label htmlFor="email" className="text-sm font-medium">Email</label>
-                            <Input id="email" name="email" type="email" required placeholder="you@university.edu" />
-                        </div>
-                        <div className="space-y-2">
-                            <label htmlFor="password" className="text-sm font-medium">Password</label>
-                            <Input id="password" name="password" type="password" required />
-                        </div>
-                        <Button formAction={login} className="w-full">Sign In</Button>
-                    </form>
+                    <LoginForm />
                 </CardContent>
                 <CardFooter className="justify-center flex-col gap-2">
                     <p className="text-sm text-muted-foreground">

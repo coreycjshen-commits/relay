@@ -11,10 +11,18 @@ export async function login(formData: FormData) {
     // in a real app, you might want to validate this with Zod
     const email = formData.get('email') as string
     const password = formData.get('password') as string
+    const captchaToken = formData.get('captchaToken') as string
+
+    if (!captchaToken) {
+        return redirect('/login?error=Please complete the captcha')
+    }
 
     const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
+        options: {
+            captchaToken,
+        },
     })
 
     if (error) {
@@ -32,6 +40,11 @@ export async function signup(formData: FormData) {
     const password = formData.get('password') as string
     const name = formData.get('name') as string
     const role = formData.get('role') as 'student' | 'alum'
+    const captchaToken = formData.get('captchaToken') as string
+
+    if (!captchaToken) {
+        return redirect('/signup?error=Please complete the captcha')
+    }
 
     // Get the origin for the email redirect URL
     const origin = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
@@ -45,6 +58,7 @@ export async function signup(formData: FormData) {
                 role,
             },
             emailRedirectTo: `${origin}/auth/callback`,
+            captchaToken,
         }
     })
 
