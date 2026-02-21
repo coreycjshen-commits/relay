@@ -167,7 +167,7 @@ export default function LandingPage() {
           </h2>
           <Link href="/signup">
             <Button size="lg" variant="secondary" className="px-10 text-lg h-12">
-              Get Started <ArrowRight className="ml-2 h-5 w-5" />
+              Join the Beta <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
         </div>

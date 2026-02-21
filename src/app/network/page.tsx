@@ -166,6 +166,18 @@ export default function NetworkPage() {
                 </div>
             </div>
 
+            <div className="bg-primary/5 border border-primary/20 p-4 rounded-lg flex items-start gap-3">
+                <div className="mt-0.5">
+                    <div className="w-5 h-5 flex items-center justify-center rounded-full bg-primary/20 text-primary">
+                        <span className="text-xs font-bold">i</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 className="font-semibold text-sm text-foreground">Welcome to the Relay Beta!</h3>
+                    <p className="text-sm text-muted-foreground mt-1">The profiles below are placeholders to demonstrate network functionality while we onboard our first cohort.</p>
+                </div>
+            </div>
+
             <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-hide">
                 {(["All", "Squash", "Tennis", "Golf"] as const).map((sport) => (
                     <Button
@@ -205,7 +217,10 @@ export default function NetworkPage() {
                                         </AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col">
-                                        <CardTitle className="text-lg">{person.name}</CardTitle>
+                                        <CardTitle className="text-lg flex items-center gap-2">
+                                            {person.name}
+                                            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-muted text-muted-foreground hidden sm:inline-flex">Placeholder</Badge>
+                                        </CardTitle>
                                         <CardDescription className="line-clamp-1">
                                             {person.role}
                                         </CardDescription>
