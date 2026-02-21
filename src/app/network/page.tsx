@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import NetworkClient from "./network-client"
 
+export const dynamic = 'force-dynamic'
+
 type Sport = "Squash" | "Tennis" | "Golf"
 
 interface RealUser {
