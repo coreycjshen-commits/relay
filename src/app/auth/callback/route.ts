@@ -10,6 +10,24 @@ export async function GET(request: Request) {
         const { error } = await supabase.auth.exchangeCodeForSession(code)
 
         if (!error) {
+            // Get the authenticated user and their metadata
+            const { data: { user } } = await supabase.auth.getUser()
+
+            if (user) {
+                const metadata = user.user_metadata || {}
+                const sport = metadata.sport
+                const school = metadata.school
+
+                // Create athlete_profiles row if sport and school are provided
+                if (sport && school) {
+                    await supabase.from('athlete_profiles').upsert({
+                        user_id: user.id,
+                        sport,
+                        school,
+                    }, { onConflict: 'user_id' })
+                }
+            }
+
             // Redirect to the confirmed page first, then they can proceed
             return NextResponse.redirect(`${origin}/signup/confirmed`)
         }

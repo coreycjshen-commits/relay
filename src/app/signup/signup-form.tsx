@@ -37,6 +37,25 @@ export default function SignupForm() {
                     <option value="alum">Former Student-Athlete (Alumni)</option>
                 </select>
             </div>
+            <div className="space-y-2">
+                <label htmlFor="sport" className="text-sm font-medium">Sport</label>
+                <select
+                    id="sport"
+                    name="sport"
+                    required
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    defaultValue=""
+                >
+                    <option value="" disabled>Select your sport</option>
+                    <option value="Squash">Squash</option>
+                    <option value="Tennis">Tennis</option>
+                    <option value="Golf">Golf</option>
+                </select>
+            </div>
+            <div className="space-y-2">
+                <label htmlFor="school" className="text-sm font-medium">School / University</label>
+                <Input id="school" name="school" type="text" required placeholder="e.g. Yale University" />
+            </div>
 
             <Captcha onVerify={setCaptchaToken} />
             <input type="hidden" name="captchaToken" value={captchaToken} />

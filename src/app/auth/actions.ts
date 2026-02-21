@@ -40,6 +40,8 @@ export async function signup(formData: FormData) {
     const password = formData.get('password') as string
     const name = formData.get('name') as string
     const role = formData.get('role') as 'student' | 'alum'
+    const sport = formData.get('sport') as string
+    const school = formData.get('school') as string
     const captchaToken = formData.get('captchaToken') as string
 
     if (!captchaToken) {
@@ -56,6 +58,8 @@ export async function signup(formData: FormData) {
             data: {
                 name,
                 role,
+                sport,
+                school,
             },
             emailRedirectTo: `${origin}/auth/callback`,
             captchaToken,
