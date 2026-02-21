@@ -65,6 +65,21 @@ export default async function NetworkPage() {
     return (
         <div className="container mx-auto max-w-7xl py-10 px-4 sm:px-6 lg:px-8">
             <NetworkClient realUsers={realUsers} />
+
+            {/* Debugging info - only visible in beta/development if users aren't showing */}
+            {realUsers.length === 0 && (
+                <div className="mt-20 p-4 bg-slate-900 text-slate-50 rounded-lg text-xs overflow-auto font-mono opacity-50">
+                    <p className="mb-2 font-bold text-red-400">Diagnostic Data (Real users empty):</p>
+                    <pre>
+                        {JSON.stringify({
+                            current_user_id: user.id,
+                            query_error: error,
+                            total_raw_users: users?.length || 0,
+                            raw_users_sample: users?.slice(0, 2)
+                        }, null, 2)}
+                    </pre>
+                </div>
+            )}
         </div>
     )
 }
